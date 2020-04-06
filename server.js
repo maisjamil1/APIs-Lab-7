@@ -29,7 +29,7 @@ function locationHandler(request, response) {
       const locationData = new Location(city, geoData);
       response.status(200).json(locationData);
     })
-    
+    .catch((errT)=> errorHandler(errT, request, response));
 }
 
 
@@ -53,6 +53,7 @@ function Location(city, geoData) {
         });
         response.status(200).json(weatherSummaries);
       })
+      .catch((errT)=> errorHandler(errT, request, response));
   }
   
   
@@ -71,7 +72,13 @@ function Location(city, geoData) {
 app.use('*', notFoundHandler);
 
 function notFoundHandler(request, response) {
-  response.status(500).send('Sorry, something went wrong');
+  response.status(404).send('page Not Found');
 }
+
+function errorHandler(error, request, response) {
+  response.status(500).send(error);
+}
+
+
 
 app.listen(PORT,() => console.log('host :' , PORT))
