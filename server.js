@@ -10,7 +10,7 @@ app.use(cors());
 
 app.get('/location', locationHandler);
 app.get('/weather', weatherHandler);
-
+app.get('/trails', trailhandler);
 
 
 
@@ -62,9 +62,36 @@ function Location(city, geoData) {
     this.time = new Date(day.valid_date).toString().slice(0, 15);
   }
 
+//___________________________________________________
+  
+    function trailhandler(request, response) {
+    superAgent(
+      `https://www.hikingproject.com/data/get-trails?lat=${request.query.latitude}&lon=${request.query.longitude}&maxDistance=10&key=${process.env.TRAIL_API_KEY}`)
+    
+    .then((trailRes) => {   
+        console.log(trailRes.body);
+        const trailsobj = trailRes.body.trails.map((trail$$)=> {
+            return new Trail(trail$$);
+        });
+
+        response.status(200).json(trailsobj);
+
+    })
+    .catch((errT)=> errorHandler(errT, request, response));
+   
+   });
 
 
-
+   function Trail(trail$$) {
+    this.name = trail$$.name;
+    this.location = trail$$.location ;
+    this.length = trail$$.length ;
+    this.stars = trail$$.stars ;
+    this.star$votes = trail$$.starVotes ;
+    this.summary = trail$$.summary ;
+    this.trail$url = trail$$.url ;
+   
+}
 
 
 
