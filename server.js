@@ -65,8 +65,7 @@ function Location(city, geoData) {
 //___________________________________________________
   
     function trailhandler(request, response) {
-    superAgent(
-      `https://www.hikingproject.com/data/get-trails?lat=${request.query.latitude}&lon=${request.query.longitude}&maxDistance=10&key=${process.env.TRAIL_API_KEY}`)
+    superagent(`https://www.hikingproject.com/data/get-trails?lat=${request.query.latitude}&lon=${request.query.longitude}&maxDistance=400&key=${process.env.TRAIL_API_KEY}`)
     
     .then((trailRes) => {   
         console.log(trailRes.body);
@@ -79,7 +78,7 @@ function Location(city, geoData) {
     })
     .catch((errT)=> errorHandler(errT, request, response));
    
-   });
+   };
 
 
    function Trail(trail$$) {
@@ -87,9 +86,12 @@ function Location(city, geoData) {
     this.location = trail$$.location ;
     this.length = trail$$.length ;
     this.stars = trail$$.stars ;
-    this.star$votes = trail$$.starVotes ;
+    this.star$votes = trail$$.star_votes ;
     this.summary = trail$$.summary ;
-    this.trail$url = trail$$.url ;
+    this.trail$url = trail$$.trail_url ;
+    this.conditions= trail$$.conditions;
+    this.conditions_date=trail$$.condition_date;
+    this.conditions_time=trail$$.condtion_time
    
 }
 
